@@ -3,7 +3,11 @@
 
 ## Installation
 
-Use the docker to install nycdot-db-service.\
+Use your local machine 
+
+OR
+
+Use the docker to run the program.\
 [Install Docker Engine](https://docs.docker.com/engine/install/)
 
 ## Usage
