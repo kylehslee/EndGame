@@ -5,8 +5,8 @@ import argparse
 from scsa import *
 from player import *
 from mastermind import *
-from endgame_B1 import *
-from endgame_B2 import *
+from EndGame_B1 import *
+from EndGame_B2 import *
 
 parser = argparse.ArgumentParser(description="Play a game of Mastermind.")
 parser.add_argument("--board_length", nargs="?", type=int, required=True)
