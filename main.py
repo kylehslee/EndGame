@@ -5,7 +5,8 @@ import argparse
 from scsa import *
 from player import *
 from mastermind import *
-
+from endgame_B1 import *
+from endgame_B2 import *
 
 parser = argparse.ArgumentParser(description="Play a game of Mastermind.")
 parser.add_argument("--board_length", nargs="?", type=int, required=True)
@@ -18,7 +19,7 @@ parser.add_argument(
     nargs="?",
     type=str,
     required=True,
-    choices=["EndGame_b1", "EndGame_b2"],
+    choices=["RandomFolks", "Boring", "EndGame_B1", "EndGame_B2"],
 )
 
 parser.add_argument(
@@ -45,16 +46,22 @@ args = parser.parse_args()
 
 def str_to_player(player_name: str) -> Player:
 
+    if player_name == "RandomFolks":
 
-#############################################
-    if player_name == "EndGame_b1":
+        player = RandomFolks()
 
-        player = EndGame_b1()
-#############################################
-    elif player_name == "EndGame_b2":
+    elif player_name == "Boring":
 
-        player = EndGame_b2()
-#############################################
+        player = Boring()
+
+    elif player_name == "EndGame_B1":
+
+        player = EndGame_B1()
+
+    elif player_name == "EndGame_B2":
+
+        player = EndGame_B2()
+        
     else:
 
         raise ValueError("Unrecognized Player.")
