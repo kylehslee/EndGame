@@ -21,7 +21,17 @@ usage: main.py [-h] --board_length [BOARD_LENGTH] --num_colors [{1,2,3,4,5,6,7,8
 python3 main.py --board_length 4 --num_colors 6 --player_name EndGame_b2 --scsa_name TwoColorAlternating --num_rounds 10
 ```
 
-## Test
+## Docker
+
+Build an image.
+```bash
+docker build . -t pydev
+```
+
+Run the image.
+```bash
+docker run -it pydev --board_length 4 --num_colors 6 --player_name EndGame_b2 --scsa_name TwoColorAlternating --num_rounds 1
+```
 
 
 ## Contributing
