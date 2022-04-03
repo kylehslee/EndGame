@@ -3,7 +3,7 @@
 
 import time
 from enum import Enum
-from scsa import *
+from scsa_2 import *
 from player import *
 
 
@@ -217,7 +217,7 @@ class Round:
 
         return (exact, other)
 
-    def respond_to_guess(self, guess: str) -> tuple[Result, int, int, int]:
+    def respond_to_guess(self, guess: str):
         """Responds with correctness of player's guess.
 
         Args:
@@ -252,7 +252,7 @@ class Round:
 
         return response
 
-    def play_round(self, player: Player) -> tuple[Result, int]:
+    def play_round(self, player: Player):
         """Plays out a round of Mastermind.
 
         Args:

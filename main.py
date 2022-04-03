@@ -2,7 +2,7 @@
 # See example.ipynb for other ways to use the Mastermind representation.
 
 import argparse
-from scsa import *
+from scsa_2 import *
 from player import *
 from mastermind import *
 
@@ -12,13 +12,15 @@ parser.add_argument("--board_length", nargs="?", type=int, required=True)
 parser.add_argument(
     "--num_colors", nargs="?", type=int, required=True, choices=range(1, 27)
 )
+
 parser.add_argument(
     "--player_name",
     nargs="?",
     type=str,
     required=True,
-    choices=["EndGame_b1"],
+    choices=["EndGame_b1", "EndGame_b2"],
 )
+
 parser.add_argument(
     "--scsa_name",
     nargs="?",
@@ -35,6 +37,7 @@ parser.add_argument(
         "PreferFewer",
     ],
 )
+
 parser.add_argument("--num_rounds", nargs="?", type=int, required=True)
 
 args = parser.parse_args()
@@ -50,7 +53,7 @@ def str_to_player(player_name: str) -> Player:
 #############################################
     elif player_name == "EndGame_b2":
 
-        player = EndGame_b1()
+        player = EndGame_b2()
 #############################################
     else:
 

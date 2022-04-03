@@ -3,7 +3,7 @@
 
 import random
 from abc import ABC, abstractmethod
-from scsa import list_to_str, InsertColors
+from scsa_2 import list_to_str, InsertColors
 import sys
 import itertools
 
@@ -58,8 +58,13 @@ class EndGame_b1(Player):
         """Constructor for BaseLine1 Player"""
 
         self.player_name ="Baseline1"
-        self.is_guess_generated = False
         self.iters = None
+
+    def make_colors(self, color):
+        colors = []
+        for i in range(color):
+            colors.append(chr(i + 65))
+        return colors
 
     def make_guess(
         self,
@@ -69,38 +74,43 @@ class EndGame_b1(Player):
         last_response: tuple([int, int, int]),
     ) -> str:
 
-        #Inner Function#
-
-        def make_colors(color):
-            colors = []
-            for i in range(color):
-                colors.append(chr(i + 65))
-            return colors
-
-
-        """
-        replaced the commandline arguments for the make_colors() and repeat=int() with the parameters of the make_guess function
-        This may or may not be correct as whenever I try testing the player with the example given in BB - the command line doesn't pick up the arguments
-        """
         try:
-            if self.is_guess_generated == False:
-                self.iters = itertools.product(make_colors((len(colors))), repeat=int(board_length))
-                self.is_guess_generated = True
+            if last_response[2] == 0:
+                self.iters = itertools.product(self.make_colors((len(colors))), repeat=int(board_length))
             return ''.join(next(self.iters))
 
         except:
-            self.iters = itertools.product(make_colors((len(colors))), repeat=int(board_length))
+            self.iters = itertools.product(self.make_colors((len(colors))), repeat=int(board_length))
             return ''.join(next(self.iters))
 
-    
+   
 
 class EndGame_b2(Player):
     def __init__(self):
         """Constructor for BaseLine1 Player"""
 
-        self.player_name ="Baseline1"
-        self.is_guess_generated = False
+        self.player_name ="Baseline2"
         self.iters = None
+        self.rule_out_dict = []
+        self.last_guess = None
+
+
+    def late_constructor(self, pegs):
+        self.rule_out_dict = []
+        for i in range(pegs): # Initialize rule_out_dict array with empty sets.
+            self.rule_out_dict.append(set())   #     
+
+    def rule_out(self, guess):
+        for i in range(len(guess)):
+            if guess[i] in self.rule_out_dict[i]:
+                return True
+        return False
+    
+    def make_colors(self, color):
+        colors = []
+        for i in range(color):
+            colors.append(chr(i + 65))
+        return colors
 
     def make_guess(
         self,
@@ -110,28 +120,38 @@ class EndGame_b2(Player):
         last_response: tuple([int, int, int]),
     ) -> str:
 
-        #Inner Function#
-
-        def make_colors(color):
-            colors = []
-            for i in range(color):
-                colors.append(chr(i + 65))
-            return colors
-
-
-        """
-        replaced the commandline arguments for the make_colors() and repeat=int() with the parameters of the make_guess function
-        This may or may not be correct as whenever I try testing the player with the example given in BB - the command line doesn't pick up the arguments
-        """
+        # print('----------------')
+        # print(last_response)
         try:
-            if self.is_guess_generated == False:
-                self.iters = itertools.product(make_colors((len(colors))), repeat=int(board_length))
-                self.is_guess_generated = True
-            return ''.join(next(self.iters))
+            if last_response[2] == 0:
+                self.late_constructor(board_length)
+                self.iters = itertools.product(self.make_colors((len(colors))), repeat=int(board_length))
+
+            if last_response[2] == 0:    
+                guess = ''.join(next(self.iters))
+                # print('initial guess:', guess)
+                self.last_guess = guess       
+                return guess
+
+            else:
+                if last_response[0] == 0 and last_response[1] == 0:                                                                                   
+                    for i in range(len(self.last_guess)):       
+                        self.rule_out_dict[i].add(self.last_guess[i])  
+                    # print(self.rule_out_dict)
+
+                guess = ''.join(next(self.iters))
+                # print('initial guess:', guess)
+
+                while self.rule_out(guess) == True:
+                    guess = ''.join(next(self.iters))
+                    # print('next guess:', guess)
+                
+                self.last_guess = guess
+                return guess
 
         except:
-            self.iters = itertools.product(make_colors((len(colors))), repeat=int(board_length))
+            # print("FILL IT AGAIN")
+            self.iters = itertools.product(self.make_colors((len(colors))), repeat=int(board_length))
             return ''.join(next(self.iters))
 
-    
 

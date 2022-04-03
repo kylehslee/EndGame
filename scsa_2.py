@@ -5,7 +5,7 @@ import random
 from abc import ABC, abstractmethod
 
 
-def list_to_str(arr: list[str]) -> str:
+def list_to_str(arr) -> str:
     """Converts a list of strings to a string
 
     Args:
@@ -18,7 +18,7 @@ def list_to_str(arr: list[str]) -> str:
     return "".join(arr)
 
 
-def read_from_file(file_name: str) -> list[str]:
+def read_from_file(file_name):
     """Reads codes from file
 
     Args:
@@ -53,8 +53,7 @@ class SCSA(ABC):
 
     @abstractmethod
     def generate_codes(
-        self, length: int, colors: list[str], num_codes: int = 1
-    ) -> list[str]:
+        self, length: int, colors, num_codes: int = 1):
         """Generate codes based on secret-code selection algorithm
 
         Args:
@@ -68,7 +67,7 @@ class SCSA(ABC):
 
         raise NotImplementedError
 
-    def write_to_file(self, codes: list[str], length: int, num_colors: int) -> None:
+    def write_to_file(self, codes, length: int, num_colors: int) -> None:
         """Writes codes to a file
 
         Args:
@@ -90,7 +89,7 @@ class SCSA(ABC):
         return
 
     def generate_and_write_to_file(
-        self, length: int, colors: list[str], num_codes: int = 100
+        self, length: int, colors, num_codes: int = 100
     ) -> None:
         """Generates codes and writes them to a file
 
@@ -120,8 +119,8 @@ class InsertColors(SCSA):
         self.name = "InsertColors"
 
     def generate_codes(
-        self, length: int, colors: list[str], num_codes: int = 1
-    ) -> list[str]:
+        self, length: int, colors, num_codes: int = 1
+    ):
         """Generate codes based on InsertColors SCSA
 
         Args:
@@ -155,8 +154,8 @@ class TwoColor(SCSA):
         self.name = "TwoColor"
 
     def generate_codes(
-        self, length: int, colors: list[str], num_codes: int = 1
-    ) -> list[str]:
+        self, length: int, colors, num_codes: int = 1
+    ):
         """Generate codes based on TwoColor SCSA
 
         Args:
@@ -210,8 +209,8 @@ class ABColor(SCSA):
         self.name = "ABColor"
 
     def generate_codes(
-        self, length: int, colors: list[str], num_codes: int = 1
-    ) -> list[str]:
+        self, length: int, colors, num_codes: int = 1
+    ):
         """Generate codes based on ABColor SCSA
 
         Args:
@@ -261,8 +260,8 @@ class TwoColorAlternating(SCSA):
         self.name = "TwoColorAlternating"
 
     def generate_codes(
-        self, length: int, colors: list[str], num_codes: int = 1
-    ) -> list[str]:
+        self, length: int, colors, num_codes: int = 1
+    ):
         """Generate codes based on TwoColorAlternating SCSA
 
         Args:
@@ -310,8 +309,8 @@ class OnlyOnce(SCSA):
         self.name = "OnlyOnce"
 
     def generate_codes(
-        self, length: int, colors: list[str], num_codes: int = 1
-    ) -> list[str]:
+        self, length: int, colors, num_codes: int = 1
+    ):
         """Generate codes based on OnlyOnce SCSA
 
         Args:
@@ -356,8 +355,8 @@ class FirstLast(SCSA):
         self.name = "FirstLast"
 
     def generate_codes(
-        self, length: int, colors: list[str], num_codes: int = 1
-    ) -> list[str]:
+        self, length: int, colors, num_codes: int = 1
+    ):
         """Generate codes based on FirstLast SCSA
 
         Args:
@@ -399,8 +398,8 @@ class UsuallyFewer(SCSA):
         self.name = "UsuallyFewer"
 
     def generate_codes(
-        self, length: int, colors: list[str], num_codes: int = 1
-    ) -> list[str]:
+        self, length: int, colors, num_codes: int = 1
+    ):
         """Generate codes based on UsuallyFewer SCSA
 
         Args:
@@ -448,8 +447,8 @@ class PreferFewer(SCSA):
         self.name = "PreferFewer"
 
     def generate_codes(
-        self, length: int, colors: list[str], num_codes: int = 1
-    ) -> list[str]:
+        self, length: int, colors, num_codes: int = 1
+    ):
         """Generate codes based on PreferFewer SCSA
 
         Args:
