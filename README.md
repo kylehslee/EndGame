@@ -30,7 +30,7 @@ docker build . -t pydev
 
 Run the image.
 ```bash
-docker run -it pydev --board_length 4 --num_colors 6 --player_name EndGame_b2 --scsa_name TwoColorAlternating --num_rounds 1
+docker run -it --rm pydev --board_length 4 --num_colors 6 --player_name EndGame_b2 --scsa_name TwoColorAlternating --num_rounds 1
 ```
 
 
