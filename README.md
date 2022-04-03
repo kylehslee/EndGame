@@ -8,8 +8,10 @@ Use the docker to install nycdot-db-service.\
 
 ## Usage
 
+```bash
 usage: main.py [-h] --board_length [BOARD_LENGTH] --num_colors [{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26}] --player_name [{EndGame_b1,EndGame_b2}] --scsa_name
                [{InsertColors,TwoColor,ABColor,TwoColorAlternating,OnlyOnce,FirstLast,UsuallyFewer,PreferFewer}] --num_rounds [NUM_ROUNDS]
+```
 
 ```bash
 python3 main.py --board_length 4 --num_colors 6 --player_name EndGame_b2 --scsa_name TwoColorAlternating --num_rounds 10
