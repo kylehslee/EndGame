@@ -17,7 +17,7 @@ parser.add_argument(
     nargs="?",
     type=str,
     required=True,
-    choices=["RandomFolks", "Boring"],
+    choices=["EndGame_b1"],
 )
 parser.add_argument(
     "--scsa_name",
@@ -42,18 +42,15 @@ args = parser.parse_args()
 
 def str_to_player(player_name: str) -> Player:
 
-    if player_name == "RandomFolks":
-
-        player = RandomFolks()
-
-    elif player_name == "Boring":
-
-        player = Boring()
 
 #############################################
-    elif player_name == "EndGame":
+    if player_name == "EndGame_b1":
 
-        player = EndGame()
+        player = EndGame_b1()
+#############################################
+    elif player_name == "EndGame_b2":
+
+        player = EndGame_b1()
 #############################################
     else:
 

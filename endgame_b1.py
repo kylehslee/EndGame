@@ -37,7 +37,11 @@ if __name__=="__main__":
     # Used Cartesian product below. It basiaclly gives you 
     # the first iterator of the set of all ordered pairs.
     # So, used for-loop to print all pairs.
-    for i in itertools.product(make_colors(int(sys.argv[1])), repeat=int(sys.argv[2])):
-        print(''.join(i), end=', ') # print a pair.
-        cnt += 1 # increment the count by 1 every loop.
-    
+    # for i in itertools.product(make_colors(int(sys.argv[1])), repeat=int(sys.argv[2])):
+    #     print(''.join(i), end=', ') # print a pair.
+    #     cnt += 1 # increment the count by 1 every loop.
+
+    iters = itertools.product(make_colors(int(sys.argv[1])), repeat=int(sys.argv[2]))
+    print(len(iters))
+    print(''.join((next(iters))))
+    print(next(iters))
