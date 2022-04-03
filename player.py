@@ -3,7 +3,7 @@
 
 import random
 from abc import ABC, abstractmethod
-from scsa_2 import list_to_str, InsertColors
+from scsa import list_to_str, InsertColors
 import sys
 import itertools
 

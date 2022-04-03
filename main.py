@@ -2,7 +2,7 @@
 # See example.ipynb for other ways to use the Mastermind representation.
 
 import argparse
-from scsa_2 import *
+from scsa import *
 from player import *
 from mastermind import *
 
