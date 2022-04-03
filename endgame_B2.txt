@@ -1,0 +1,12 @@
+-------------------------------BASELINE 2------------------------------
+Player: Baseline2
+SCSA Name: TwoColor
+Game: 4 Pegs 6 Colors
+Rounds: 100 out of 100
+Results: {Wins: 53, Losses: 47, Failures: 0, Score: 1447.4014473918533}
+
+Player: Baseline2
+SCSA Name: TwoColorAlternating
+Game: 4 Pegs 6 Colors
+Rounds: 100 out of 100
+Results: {Wins: 57, Losses: 43, Failures: 0, Score: 1185.7838846732695}

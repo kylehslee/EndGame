@@ -42,7 +42,6 @@ class Player(ABC):
 
 
 
-
 '''
 EndGame player that inherits from the 'Player Class'
 
@@ -51,8 +50,6 @@ As per the project.pdf on BB
     Inherit the make_guess function and have it do the magic of whatever baseline we are working on
 
 '''
-
-
 class EndGame_b1(Player):
     def __init__(self):
         """Constructor for BaseLine1 Player"""
@@ -82,8 +79,6 @@ class EndGame_b1(Player):
         except:
             self.iters = itertools.product(self.make_colors((len(colors))), repeat=int(board_length))
             return ''.join(next(self.iters))
-
-   
 
 class EndGame_b2(Player):
     def __init__(self):
