@@ -7,6 +7,7 @@ from player import *
 from mastermind import *
 from EndGame_B1 import *
 from EndGame_B2 import *
+from EndGame_Own import *
 
 parser = argparse.ArgumentParser(description="Play a game of Mastermind.")
 parser.add_argument("--board_length", nargs="?", type=int, required=True)
@@ -19,7 +20,7 @@ parser.add_argument(
     nargs="?",
     type=str,
     required=True,
-    choices=["RandomFolks", "Boring", "EndGame_B1", "EndGame_B2"],
+    choices=["RandomFolks", "Boring", "EndGame_B1", "EndGame_B2", "EndGame_Own"],
 )
 
 parser.add_argument(
@@ -61,6 +62,10 @@ def str_to_player(player_name: str) -> Player:
     elif player_name == "EndGame_B2":
 
         player = EndGame_B2()
+
+    elif player_name == "EndGame_Own":
+
+        player = EndGame_Own()
         
     else:
 
