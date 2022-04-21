@@ -38,13 +38,7 @@ class Player(ABC):
         raise NotImplementedError
 
 
-#-------------------------------------------------------------------
-# B2: Exhaustively enumerate all possibilities. 
-# Guess each possibility in lexicographic order 
-# unless it was ruled out by some previous response. 
-# For example, for p = 4, if guess AAAB got 0 0 1 in 
-# response, you would never again on that round make 
-# any guess that began with AAA or ended in B. 
+
 class EndGame_Own(Player):
     def __init__(self):
         """Constructor for Own Player"""
