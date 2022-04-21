@@ -50,11 +50,9 @@ class EndGame_Own(Player):
         """Constructor for Own Player"""
 
         self.player_name ="Own"
-        self.iters = None
         self.rule_out_dict = []
         self.last_guess = None
 
-        # TEST
         self.queue = []
         self.one_char = 0
         self.visited = []
@@ -67,10 +65,9 @@ class EndGame_Own(Player):
         self.cur_char = '#'
 
         self.cnt = 0
-        # END
 
     def late_constructor(self, pegs):
-        #
+
         self.queue = []
         self.one_char = 0
         self.visited = []
@@ -81,10 +78,7 @@ class EndGame_Own(Player):
         self.search_mode = False
         self.num_of_gems = 0
         self.cur_char = '#'
-
         self.cnt = 0
-        #
-
         self.rule_out_dict = []
         for i in range(pegs): # Initialize rule_out_dict array with empty sets.
             self.rule_out_dict.append(set()) 
@@ -114,27 +108,17 @@ class EndGame_Own(Player):
     ) -> str:
         try:
             if last_response[2] == 0:
-                print("try last_response[2] == 0")
                 self.late_constructor(board_length)
-
                 guess = 'A' * board_length
                 self.cur_char = 'A'
                 self.one_char += 1
-
                 self.try_mode = True
                 self.search_mode = False
-            
                 self.last_guess = guess       
                 return guess
-                
             else:
-                print('\n')
-                print(last_response)
-                print("try last_response[2] != 0")
                 if self.try_mode:
-                    print("try_mode")
                     if (last_response[0] + last_response[1]) <= self.num_of_gems:    
-                        print("if (last_response[0] + last_response[1]) <= self.num_of_gems")                                                                               
                         for i in range(len(self.last_guess)):
                             if self.gauntlet[i] == '#':       
                                 self.rule_out_dict[i].add(self.cur_char)  
@@ -153,25 +137,18 @@ class EndGame_Own(Player):
                         return guess
 
                     elif (last_response[0] + last_response[1]) > self.num_of_gems:
-                        print("elif (last_response[0] + last_response[1]) > self.num_of_gems")
                         next_set = [self.cur_char] * (last_response[0] + last_response[1] - self.num_of_gems) \
                         + [chr(65 + (self.one_char % len(colors)))] * (board_length - (last_response[0] + last_response[1]))
-                        print(next_set)
                         next_set = set(itertools.permutations(next_set))
-                        print('@@@@@@@@@@@@@@@@@@@@@@@@@@')
-                        print(next_set)
-                        print('Gauntlet', end='')
-                        print(self.gauntlet)
+
                         for i in next_set:
-                            print(i)
                             tmp = list(i)
                             for idx in range(len(self.gauntlet)):
                                 if not self.gauntlet[idx] == '#':
                                     tmp.insert(idx, self.gauntlet[idx])
 
                             self.queue.append(''.join(map(str, tmp)))
-                            print('PPPLLLZZZ@!#!@$!$@')
-                            print(''.join(map(str, tmp)))
+
                         
                         self.search_mode = True
                         self.try_mode = False
@@ -181,19 +158,14 @@ class EndGame_Own(Player):
                         return guess
 
                 elif self.search_mode:
-                    print("search_mode")
                     if (last_response[0] + last_response[1]) > self.num_of_gems:    ## NOT NEEDED. DELETE THIS LINE.
-                        print("if (last_response[0] + last_response[1]) > self.num_of_gems")
                         if last_response[0] == (last_response[0] + last_response[1]) and last_response[1] == 0:
-                            print('if last_response[0] == (last_response[0] + last_response[1]) and last_response[1] == 0')
                             for i in range(board_length):
                                 if self.last_guess[i] == self.cur_char:
-                                    print("IDX: [", i,"]")
                                     self.gauntlet[i] = self.cur_char
                                     self.num_of_gems += 1
                             self.queue.clear()
 
-                            ## TRY MODE ##
                             next_possible = [chr(65 + (self.one_char % len(colors)))] * board_length
                             for i in range(board_length):
                                 if not self.gauntlet[i] == '#':
@@ -210,7 +182,6 @@ class EndGame_Own(Player):
                             self.last_guess = guess 
                             return guess
 
-                    print('next queue')
                     guess = self.queue.pop(0)
                     while self.rule_out(guess) == True:
                         guess = self.queue.pop(0)
@@ -221,15 +192,11 @@ class EndGame_Own(Player):
         except:
             print("DAMN----------------------------@@@!!  " , self.cnt)
             self.cnt += 1
-
             self.late_constructor(board_length)
-
             guess = 'A' * board_length
             self.cur_char = 'A'
             self.one_char += 1
-
             self.try_mode = True
             self.search_mode = False
-        
             self.last_guess = guess       
             return guess
