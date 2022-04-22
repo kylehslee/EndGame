@@ -8,6 +8,10 @@ from mastermind import *
 from EndGame_B1 import *
 from EndGame_B2 import *
 from EndGame_Own import *
+import timeit
+
+start = timeit.default_timer()
+print("Start")
 
 parser = argparse.ArgumentParser(description="Play a game of Mastermind.")
 parser.add_argument("--board_length", nargs="?", type=int, required=True)
@@ -41,82 +45,52 @@ parser.add_argument(
 )
 
 parser.add_argument("--num_rounds", nargs="?", type=int, required=True)
-
 args = parser.parse_args()
 
-
 def str_to_player(player_name: str) -> Player:
-
     if player_name == "RandomFolks":
-
         player = RandomFolks()
-
     elif player_name == "Boring":
-
         player = Boring()
-
     elif player_name == "EndGame_B1":
-
         player = EndGame_B1()
-
     elif player_name == "EndGame_B2":
-
         player = EndGame_B2()
-
     elif player_name == "EndGame_Own":
-
-        player = EndGame_Own()
-        
+        player = EndGame_Own()        
     else:
-
         raise ValueError("Unrecognized Player.")
-
     return player
 
 
 def str_to_scsa(scsa_name: str) -> SCSA:
-
     if scsa_name == "InsertColors":
-
         scsa = InsertColors()
-
     elif scsa_name == "TwoColor":
-
         scsa = TwoColor()
-
     elif scsa_name == "ABColor":
-
         scsa = ABColor()
-
     elif scsa_name == "TwoColorAlternating":
-
         scsa = TwoColorAlternating()
-
     elif scsa_name == "OnlyOnce":
-
         scsa = OnlyOnce()
-
     elif scsa_name == "FirstLast":
-
         scsa = FirstLast()
-
     elif scsa_name == "UsuallyFewer":
-
         scsa = UsuallyFewer()
-
     elif scsa_name == "PreferFewer":
-
         scsa = PreferFewer()
-
     else:
-
         raise ValueError("Unrecognized SCSA.")
-
     return scsa
-
 
 player = str_to_player(args.player_name)
 scsa = str_to_scsa(args.scsa_name)
 colors = [chr(i) for i in range(65, 91)][: args.num_colors]
 mastermind = Mastermind(args.board_length, colors)
 mastermind.play_tournament(player, scsa, args.num_rounds)
+
+stop = timeit.default_timer()
+execution_time = stop - start
+
+print("Program Executed in "+str(execution_time)) # It returns time in seconds

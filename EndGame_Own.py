@@ -2,7 +2,7 @@ import random
 from abc import ABC, abstractmethod
 from scsa import list_to_str, InsertColors
 import itertools
-
+from sympy.utilities.iterables import multiset_permutations
 
 class Player(ABC):
     """Player for Mastermind"""
@@ -102,6 +102,7 @@ class EndGame_Own(Player):
     ) -> str:
         try:
             if last_response[2] == 0:
+                # print("WHYY")
                 self.late_constructor(board_length)
                 guess = 'A' * board_length
                 self.cur_char = 'A'
@@ -111,8 +112,10 @@ class EndGame_Own(Player):
                 self.last_guess = guess       
                 return guess
             else:
+                # print("WHATTTT")
                 if self.try_mode:
                     if (last_response[0] + last_response[1]) <= self.num_of_gems:    
+                        # print("WHATTTT     2")
                         for i in range(len(self.last_guess)):
                             if self.gauntlet[i] == '#':       
                                 self.rule_out_dict[i].add(self.cur_char)  
@@ -131,10 +134,13 @@ class EndGame_Own(Player):
                         return guess
 
                     elif (last_response[0] + last_response[1]) > self.num_of_gems:
+                        # print("WHATTTT      3")
                         next_set = [self.cur_char] * (last_response[0] + last_response[1] - self.num_of_gems) \
                         + [chr(65 + (self.one_char % len(colors)))] * (board_length - (last_response[0] + last_response[1]))
-                        next_set = set(itertools.permutations(next_set))
-
+                        # print('SUB WHAT          1')
+                        next_set = multiset_permutations(next_set)
+                        # next_set = set(itertools.permutations(next_set))
+                        # print('SUB WHAT          2')
                         for i in next_set:
                             tmp = list(i)
                             for idx in range(len(self.gauntlet)):
@@ -152,6 +158,7 @@ class EndGame_Own(Player):
                         return guess
 
                 elif self.search_mode:
+                    # print("WHATTTT          4")
                     if (last_response[0] + last_response[1]) > self.num_of_gems:    ## NOT NEEDED. DELETE THIS LINE.
                         if last_response[0] == (last_response[0] + last_response[1]) and last_response[1] == 0:
                             for i in range(board_length):

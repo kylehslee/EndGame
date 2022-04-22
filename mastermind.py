@@ -233,7 +233,7 @@ class Round:
         self.guesses += 1
 
         if self.time_used > self.time_cutoff + self.time_buffer:
-
+            
             return (Result.LOSS, 0, 0, self.guesses)
 
         elif guess == self.answer:
@@ -372,7 +372,7 @@ class Mastermind:
             self.time_used += duration
 
             if self.time_used > self.tournament_time_cutoff:
-
+                
                 break
 
             # print("Round:", round, "|",  "Result:", result, "|", "Guesses:", guesses)
@@ -384,11 +384,11 @@ class Mastermind:
                 results.score += (
                     self.board_length * len(self.colors) * (5 * guesses ** (-0.5))
                 )
+                
 
             elif result == Result.FAILURE:
 
                 results.score -= 2 * self.board_length * len(self.colors)
-
                 break
 
         self.print_results(player, scsa.name, results, num_rounds)
