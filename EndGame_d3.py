@@ -1,4 +1,7 @@
+import random
 from abc import ABC, abstractmethod
+from scsa import list_to_str, InsertColors
+import itertools
 from sympy.utilities.iterables import multiset_permutations
 
 class Player(ABC):
@@ -93,7 +96,7 @@ class EndGame_Own(Player):
                 self.search_mode = False
                 self.last_guess = guess       
                 return guess
-
+                
             else:
                 if self.try_mode:
                     if (last_response[0] + last_response[1]) <= self.num_of_gems:    

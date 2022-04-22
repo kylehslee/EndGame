@@ -1,12 +1,77 @@
--------------------------------BASELINE 2------------------------------
+Player: Baseline2
+SCSA Name: InsertColors
+Game: 7 Pegs 5 Colors
+Rounds: 100 out of 100
+Results: {Wins: 1, Losses: 99, Failures: 0, Score: 28.388748697883447}
+
 Player: Baseline2
 SCSA Name: TwoColor
-Game: 4 Pegs 6 Colors
+Game: 7 Pegs 5 Colors
 Rounds: 100 out of 100
-Results: {Wins: 53, Losses: 47, Failures: 0, Score: 1447.4014473918533}
+Results: {Wins: 19, Losses: 81, Failures: 0, Score: 621.4294294881389}
+
+Player: Baseline2
+SCSA Name: ABColor
+Game: 7 Pegs 5 Colors
+Rounds: 100 out of 100
+Results: {Wins: 7, Losses: 93, Failures: 0, Score: 334.73851321436706}
 
 Player: Baseline2
 SCSA Name: TwoColorAlternating
-Game: 4 Pegs 6 Colors
+Game: 7 Pegs 5 Colors
 Rounds: 100 out of 100
-Results: {Wins: 57, Losses: 43, Failures: 0, Score: 1185.7838846732695}
+Results: {Wins: 7, Losses: 93, Failures: 0, Score: 158.8592580087619}
+
+Player: Baseline2
+SCSA Name: OnlyOnce
+Game: 7 Pegs 5 Colors
+Rounds: 100 out of 100
+Results: {Wins: 0, Losses: 100, Failures: 0, Score: 0}
+
+Player: Baseline2
+SCSA Name: FirstLast
+Game: 7 Pegs 5 Colors
+Rounds: 100 out of 100
+Results: {Wins: 0, Losses: 100, Failures: 0, Score: 0}
+
+Player: Baseline2
+SCSA Name: UsuallyFewer
+Game: 7 Pegs 5 Colors
+Rounds: 100 out of 100
+Results: {Wins: 14, Losses: 86, Failures: 0, Score: 583.5221215555657}
+
+Player: Baseline2
+SCSA Name: PreferFewer
+Game: 7 Pegs 5 Colors
+Rounds: 100 out of 100
+Results: {Wins: 51, Losses: 49, Failures: 0, Score: 5756.546876708922}
+
+Player: Baseline2
+SCSA Name: mystery1
+Game: 7 Pegs 5 Colors
+Rounds: 100 out of 100
+Results: {Wins: 49, Losses: 51, Failures: 0, Score: 5031.247442231036}
+
+Player: Baseline2
+SCSA Name: mystery2
+Game: 7 Pegs 5 Colors
+Rounds: 100 out of 100
+Results: {Wins: 0, Losses: 100, Failures: 0, Score: 0}
+
+Player: Baseline2
+SCSA Name: mystery3
+Game: 7 Pegs 5 Colors
+Rounds: 100 out of 100
+Results: {Wins: 0, Losses: 100, Failures: 0, Score: 0}
+
+Player: Baseline2
+SCSA Name: mystery4
+Game: 7 Pegs 5 Colors
+Rounds: 100 out of 100
+Results: {Wins: 26, Losses: 74, Failures: 0, Score: 2493.847408549861}
+
+Player: Baseline2
+SCSA Name: mystery5
+Game: 7 Pegs 5 Colors
+Rounds: 100 out of 100
+Results: {Wins: 12, Losses: 88, Failures: 0, Score: 258.8614519363141}

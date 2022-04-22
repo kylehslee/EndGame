@@ -11,7 +11,6 @@ from EndGame_Own import *
 import timeit
 
 start = timeit.default_timer()
-print("Start")
 
 parser = argparse.ArgumentParser(description="Play a game of Mastermind.")
 parser.add_argument("--board_length", nargs="?", type=int, required=True)
@@ -88,9 +87,12 @@ player = str_to_player(args.player_name)
 scsa = str_to_scsa(args.scsa_name)
 colors = [chr(i) for i in range(65, 91)][: args.num_colors]
 mastermind = Mastermind(args.board_length, colors)
-mastermind.play_tournament(player, scsa, args.num_rounds)
+
+mastermind.play_tournament(player, scsa, args.num_rounds) # for regular scsas
+
+# mastermind.practice_tournament(player, scsa, "mystery5_7_5.txt") # for 
 
 stop = timeit.default_timer()
 execution_time = stop - start
 
-print("Program Executed in "+str(execution_time)) # It returns time in seconds
+print("Program Executed in "+str(execution_time)+" seconds") # It returns time in seconds
