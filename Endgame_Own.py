@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from sympy.utilities.iterables import multiset_permutations
 
 class Player(ABC):
     """Player for Mastermind"""
@@ -36,7 +35,7 @@ class Player(ABC):
 
 
 
-class EndGame_Own(Player):
+class Endgame(Player):
     def __init__(self):
         """Constructor for Own Player"""
 
@@ -133,15 +132,16 @@ class EndGame_Own(Player):
                     elif (last_response[0] + last_response[1]) > self.num_of_gems:
                         next_set = [self.cur_char] * (last_response[0] + last_response[1] - self.num_of_gems) \
                         + [chr(65 + (self.one_char % len(colors)))] * (board_length - (last_response[0] + last_response[1]))
-                        next_set = multiset_permutations(next_set) # ONLY OPEN-SOURCE LIBRARY
 
-                        for i in next_set:
-                            tmp = list(i)
+                        my_permu = MyPermu()
+                        my_permu.findPermutations(next_set, 0, len(next_set))
+
+                        for i in my_permu:
                             for idx in range(len(self.gauntlet)):
                                 if not self.gauntlet[idx] == '#':
-                                    tmp.insert(idx, self.gauntlet[idx])
+                                    i.insert(idx, self.gauntlet[idx])
 
-                            self.queue.append(''.join(map(str, tmp)))
+                            self.queue.append(''.join(map(str, i)))
 
                         
                         self.search_mode = True
@@ -197,3 +197,36 @@ class EndGame_Own(Player):
             self.search_mode = False
             self.last_guess = guess       
             return guess
+
+class MyPermu:
+  def __init__(self):
+    self.perms = []
+    
+  def __iter__(self):
+    self.idx = 0
+    return self
+
+  def __next__(self):
+    if self.idx < len(self.perms):
+      i = self.idx
+      self.idx += 1
+      return self.perms[i]
+    raise StopIteration
+    
+  def shouldSwap(self, string, start, curr):
+    for i in range(start, curr):
+        if string[i] == string[curr]:
+            return False
+    return True
+
+  def findPermutations(self, string, index, n): 
+      if index >= n:
+        self.perms.append(string)  
+        return 
+      for i in range(index, n):
+
+          check = self.shouldSwap(string, index, i)
+          if check:
+              string[index], string[i] = string[i], string[index]
+              self.findPermutations(string, index + 1, n)
+              string[index], string[i] = string[i], string[index]

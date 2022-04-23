@@ -1,7 +1,4 @@
-#import random
 from abc import ABC, abstractmethod
-from scsa import list_to_str, InsertColors
-import itertools
 
 class Player(ABC):
     """Player for Mastermind"""
@@ -42,18 +39,19 @@ class Endgame(Player):
     def __init__(self):
         """Constructor for Own Player"""
 
-        self.player_name ="Endgame"
+        self.player_name ="Own"
 
-        self.rule_out_dict = []
+        self.rule_out_dict = []      # knowledge dictionary.
         self.last_guess = None
         self.queue = []
-        self.one_char = 0
+        self.one_char = 0            # to keep track of which character we deal with now.
         self.gauntlet = []
         self.try_mode = False
         self.search_mode = False
-        self.num_of_gems = 0
-        self.cur_char = '#'
+        self.num_of_gems = 0         # number of correct colors with a correct place we discover so far.
+        self.cur_char = '#'          # current character we deal with in try and search mode.
 
+    # Reinitialize member variables
     def late_constructor(self, pegs):
         self.rule_out_dict = []
         self.last_guess = None
@@ -63,7 +61,7 @@ class Endgame(Player):
         self.try_mode = False
         self.search_mode = False
         self.num_of_gems = 0    
-        self.cur_char = '#'
+        self.cur_char = '#'  
 
         for i in range(pegs): # Initialize rule_out_dict array with empty sets.
             self.rule_out_dict.append(set()) 
@@ -86,18 +84,31 @@ class Endgame(Player):
         last_response: tuple([int, int, int]),
     ) -> str:
         try:
+            # First guess
             if last_response[2] == 0:             
                 self.late_constructor(board_length)
                 guess = 'A' * board_length
-                self.cur_char = 'A'  
-                self.one_char += 1   # To keep track of which character we deal with now.
-                self.try_mode = True
+                self.cur_char = 'A' 
+                self.one_char += 1  
+                self.try_mode = True 
                 self.search_mode = False
-                self.last_guess = guess       
+                self.last_guess = guess
                 return guess
-                
+
+            # From second guess.
             else:
-                if self.try_mode:
+                # In try mode, try with all the same letters except for indexes at which we have knowledge.
+                # For example, start with 'AAAA' and if there is a 'A' in the answer, then switch to 
+                # search mode and find which index the 'A' is positioned at.
+                # Once we get the index of 'A', let's say 'A' is at the first index( 0-indexed ),
+                # then we will try to guess with all B's except the first index. 
+                # Our next try guess would look like 'BABB'
+                if self.try_mode:   
+                    
+                    # if the sum of correct colors with a correct place and correct colors with a wrong place is
+                    # less than or equal to the number of correct colors with a correct place we discover so far,
+                    # then it means the color we try right now is not in the answer, so try with the next 
+                    # characters.
                     if (last_response[0] + last_response[1]) <= self.num_of_gems:    
                         for i in range(len(self.last_guess)):
                             if self.gauntlet[i] == '#':       
@@ -116,18 +127,21 @@ class Endgame(Player):
                         self.last_guess = guess 
                         return guess
 
+                    # Once we get to know the current character we deal with is in the answer,
+                    # it generates all possible next guesses using multiset permutations.
                     elif (last_response[0] + last_response[1]) > self.num_of_gems:
                         next_set = [self.cur_char] * (last_response[0] + last_response[1] - self.num_of_gems) \
                         + [chr(65 + (self.one_char % len(colors)))] * (board_length - (last_response[0] + last_response[1]))
-                        next_set = itertools.permutations(next_set) # ONLY OPEN-SOURCE LIBRARY
 
-                        for i in next_set:
-                            tmp = list(i)
+                        my_permu = MyPermu()
+                        my_permu.findPermutations(next_set, 0, len(next_set))
+
+                        for i in my_permu:
                             for idx in range(len(self.gauntlet)):
                                 if not self.gauntlet[idx] == '#':
-                                    tmp.insert(idx, self.gauntlet[idx])
+                                    i.insert(idx, self.gauntlet[idx])
 
-                            self.queue.append(''.join(map(str, tmp)))
+                            self.queue.append(''.join(map(str, i)))
 
                         
                         self.search_mode = True
@@ -137,7 +151,11 @@ class Endgame(Player):
                         self.last_guess = guess 
                         return guess
 
+                # In search mode, it tries to find an index of the current character, which we deal with now,
+                # is. 
                 elif self.search_mode:
+
+                    # This is when it finds the index of the current character.
                     if last_response[0] == (last_response[0] + last_response[1]) and last_response[1] == 0:
                         for i in range(board_length):
                             if self.last_guess[i] == self.cur_char:
@@ -161,6 +179,7 @@ class Endgame(Player):
                         self.last_guess = guess 
                         return guess
 
+                    # Try with the next guess in the queue.
                     guess = self.queue.pop(0)
                     while self.rule_out(guess) == True:
                         guess = self.queue.pop(0)
@@ -168,6 +187,7 @@ class Endgame(Player):
                     self.last_guess = guess 
                     return guess
 
+        # If no possible guesses in the queue, start again.
         except:
             self.late_constructor(board_length)
             guess = 'A' * board_length
@@ -177,3 +197,36 @@ class Endgame(Player):
             self.search_mode = False
             self.last_guess = guess       
             return guess
+
+class MyPermu:
+  def __init__(self):
+    self.perms = []
+    
+  def __iter__(self):
+    self.idx = 0
+    return self
+
+  def __next__(self):
+    if self.idx < len(self.perms):
+      i = self.idx
+      self.idx += 1
+      return self.perms[i]
+    raise StopIteration
+    
+  def shouldSwap(self, string, start, curr):
+    for i in range(start, curr):
+        if string[i] == string[curr]:
+            return False
+    return True
+
+  def findPermutations(self, string, index, n): 
+      if index >= n:
+        self.perms.append(string)  
+        return 
+      for i in range(index, n):
+
+          check = self.shouldSwap(string, index, i)
+          if check:
+              string[index], string[i] = string[i], string[index]
+              self.findPermutations(string, index + 1, n)
+              string[index], string[i] = string[i], string[index]
