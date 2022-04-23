@@ -5,9 +5,9 @@ import argparse
 from scsa import *
 from player import *
 from mastermind import *
-from EndGame_B1 import *
-from EndGame_B2 import *
-from EndGame_Own import *
+from Endgame_B1 import *
+from Endgame_B2 import *
+from Endgame_d3 import *
 import timeit
 
 start = timeit.default_timer()
@@ -23,7 +23,7 @@ parser.add_argument(
     nargs="?",
     type=str,
     required=True,
-    choices=["RandomFolks", "Boring", "EndGame_B1", "EndGame_B2", "EndGame_Own"],
+    choices=["RandomFolks", "Boring", "Baseline1", "Baseline2", "Endgame"],
 )
 
 parser.add_argument(
@@ -51,12 +51,12 @@ def str_to_player(player_name: str) -> Player:
         player = RandomFolks()
     elif player_name == "Boring":
         player = Boring()
-    elif player_name == "EndGame_B1":
-        player = EndGame_B1()
-    elif player_name == "EndGame_B2":
-        player = EndGame_B2()
-    elif player_name == "EndGame_Own":
-        player = EndGame_Own()        
+    elif player_name == "Baseline1":
+        player = Baseline1()
+    elif player_name == "Baseline2":
+        player = Baseline2()
+    elif player_name == "Endgame":
+        player = Endgame()        
     else:
         raise ValueError("Unrecognized Player.")
     return player
@@ -88,9 +88,9 @@ scsa = str_to_scsa(args.scsa_name)
 colors = [chr(i) for i in range(65, 91)][: args.num_colors]
 mastermind = Mastermind(args.board_length, colors)
 
-# mastermind.play_tournament(player, scsa, args.num_rounds) # for regular scsas
+mastermind.play_tournament(player, scsa, args.num_rounds) # for regular scsas
 
-mastermind.practice_tournament(player, scsa, "mystery5_7_5.txt") # for 
+#mastermind.practice_tournament(player, scsa, "mystery5_7_5.txt") # for 
 
 stop = timeit.default_timer()
 execution_time = stop - start

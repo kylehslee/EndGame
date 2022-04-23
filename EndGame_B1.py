@@ -1,7 +1,7 @@
-import random
+#import random
 from abc import ABC, abstractmethod
 from scsa import list_to_str, InsertColors
-import sys
+#import sys
 import itertools
 
 
@@ -44,7 +44,7 @@ class Player(ABC):
 # system’s responses. For example, if pegs p = 4 and colors c = 3, 
 # guess AAAA, AAAB, AAAC, AABA, AABB, AABC and so on. This method 
 # will take at most 𝑐1 guesses.
-class EndGame_B1(Player):
+class Baseline1(Player):
     def __init__(self):
         """Constructor for BaseLine1 Player"""
 

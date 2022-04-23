@@ -1,7 +1,7 @@
-import random
+#import random
 from abc import ABC, abstractmethod
 from scsa import list_to_str, InsertColors
-import sys
+#import sys
 import itertools
 
 
@@ -46,9 +46,9 @@ class Player(ABC):
 # For example, for p = 4, if guess AAAB got 0 0 1 in 
 # response, you would never again on that round make 
 # any guess that began with AAA or ended in B. 
-class EndGame_B2(Player):
+class Baseline2(Player):
     def __init__(self):
-        """Constructor for BaseLine1 Player"""
+        """Constructor for BaseLine2 Player"""
 
         self.player_name ="Baseline2"
         self.iters = None
@@ -59,7 +59,7 @@ class EndGame_B2(Player):
     def late_constructor(self, pegs):
         self.rule_out_dict = []
         for i in range(pegs): # Initialize rule_out_dict array with empty sets.
-            self.rule_out_dict.append(set())   #     
+            self.rule_out_dict.append(set())
 
     # When iterating over the characters of guess,
     # if the n-th character is in the n-th set of 

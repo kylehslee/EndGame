@@ -1,8 +1,7 @@
-import random
+#import random
 from abc import ABC, abstractmethod
 from scsa import list_to_str, InsertColors
 import itertools
-from sympy.utilities.iterables import multiset_permutations
 
 class Player(ABC):
     """Player for Mastermind"""
@@ -39,11 +38,11 @@ class Player(ABC):
 
 
 
-class EndGame_Own(Player):
+class Endgame(Player):
     def __init__(self):
         """Constructor for Own Player"""
 
-        self.player_name ="Own"
+        self.player_name ="Endgame"
 
         self.rule_out_dict = []
         self.last_guess = None
@@ -120,7 +119,7 @@ class EndGame_Own(Player):
                     elif (last_response[0] + last_response[1]) > self.num_of_gems:
                         next_set = [self.cur_char] * (last_response[0] + last_response[1] - self.num_of_gems) \
                         + [chr(65 + (self.one_char % len(colors)))] * (board_length - (last_response[0] + last_response[1]))
-                        next_set = multiset_permutations(next_set) # ONLY OPEN-SOURCE LIBRARY
+                        next_set = itertools.permutations(next_set) # ONLY OPEN-SOURCE LIBRARY
 
                         for i in next_set:
                             tmp = list(i)
