@@ -198,36 +198,3 @@ class Endgame(Player):
             self.search_mode = False
             self.last_guess = guess       
             return guess
-
-class MyPermu:
-  def __init__(self):
-    self.perms = []
-    
-  def __iter__(self):
-    self.idx = 0
-    return self
-
-  def __next__(self):
-    if self.idx < len(self.perms):
-      i = self.idx
-      self.idx += 1
-      return self.perms[i]
-    raise StopIteration
-    
-  def shouldSwap(self, string, start, curr):
-    for i in range(start, curr):
-        if string[i] == string[curr]:
-            return False
-    return True
-
-  def findPermutations(self, string, index, n): 
-      if index >= n:
-        self.perms.append(string)  
-        return 
-      for i in range(index, n):
-
-          check = self.shouldSwap(string, index, i)
-          if check:
-              string[index], string[i] = string[i], string[index]
-              self.findPermutations(string, index + 1, n)
-              string[index], string[i] = string[i], string[index]
