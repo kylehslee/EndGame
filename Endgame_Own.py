@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import itertools
 
 class Player(ABC):
     """Player for Mastermind"""
@@ -133,16 +134,15 @@ class Endgame(Player):
                         next_set = [self.cur_char] * (last_response[0] + last_response[1] - self.num_of_gems) \
                         + [chr(65 + (self.one_char % len(colors)))] * (board_length - (last_response[0] + last_response[1]))
 
-                        my_permu = MyPermu()
-                        my_permu.findPermutations(next_set, 0, len(next_set))
+                        next_set = set(itertools.permutations(next_set)) # ONLY OPEN-SOURCE LIBRARY
 
-                        for i in my_permu:
+                        for i in next_set:
+                            tmp = list(i)
                             for idx in range(len(self.gauntlet)):
                                 if not self.gauntlet[idx] == '#':
-                                    i.insert(idx, self.gauntlet[idx])
+                                    tmp.insert(idx, self.gauntlet[idx])
 
-                            self.queue.append(''.join(map(str, i)))
-
+                            self.queue.append(''.join(map(str, tmp)))
                         
                         self.search_mode = True
                         self.try_mode = False
