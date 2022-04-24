@@ -17,7 +17,7 @@ class Player(ABC):
     def make_guess(
         self,
         board_length: int,
-        colors: list[str],
+        colors: 'list[str]',
         scsa_name: str,
         last_response: tuple([int, int, int]),
     ) -> str:
@@ -79,7 +79,7 @@ class Baseline2(Player):
     def make_guess(
         self,
         board_length: int,
-        colors: list[str],
+        colors: 'list[str]',
         scsa_name: str,
         last_response: tuple([int, int, int]),
     ) -> str:
