@@ -40,15 +40,15 @@ class Endgame(Player):
     def __init__(self):
         """Constructor for Own Player"""
 
-        self.player_name ="Own"
+        self.player_name ="EndGame"
 
         self.rule_out_dict = []      # knowledge dictionary.
         self.last_guess = None
         self.queue = []
         self.one_char = 0            # to keep track of which character we deal with now.
-        self.gauntlet = []
-        self.try_mode = False
-        self.search_mode = False
+        self.gauntlet = []           # holds our knowledge about the correct code
+        self.try_mode = False        # mode in which we find the right colors
+        self.search_mode = False     # mode in which we find the right place for a correct color
         self.num_of_gems = 0         # number of correct colors with a correct place we discover so far.
         self.cur_char = '#'          # current character we deal with in try and search mode.
 
@@ -134,7 +134,8 @@ class Endgame(Player):
                         next_set = [self.cur_char] * (last_response[0] + last_response[1] - self.num_of_gems) \
                         + [chr(65 + (self.one_char % len(colors)))] * (board_length - (last_response[0] + last_response[1]))
 
-                        next_set = set(itertools.permutations(next_set)) # ONLY OPEN-SOURCE LIBRARY
+                        next_set = set(itertools.permutations(next_set)) #Using Standard Library for permutations. Contains duplicates
+                                                                        #need to filter them out or utilize random restart for D4 when scaling up
 
                         for i in next_set:
                             tmp = list(i)
