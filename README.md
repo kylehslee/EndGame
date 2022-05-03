@@ -25,7 +25,7 @@ usage: main.py [-h] --board_length [BOARD_LENGTH] --num_colors [{1,2,3,4,5,6,7,8
 
 Example
 ```bash
-python3 main.py --board_length 4 --num_colors 6 --player_name EndGame_Own --scsa_name TwoColorAlternating --num_rounds 10
+python3 main.py --board_length 4 --num_colors 6 --player_name Endgame --scsa_name TwoColorAlternating --num_rounds 100
 ```
 
 ## Docker
