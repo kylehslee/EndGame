@@ -1,8 +1,8 @@
-Player: Own
+Player: EndGame
 SCSA Name: InsertColors
 Game: 7 Pegs 5 Colors
 Rounds: 100 out of 100
-Results: {Wins: 100, Losses: 0, Failures: 0, Score: 4075.644842962418}
+Results: {Wins: 100, Losses: 0, Failures: 0, Score: 4201.166697694909}
 
 Player: Own
 SCSA Name: TwoColor

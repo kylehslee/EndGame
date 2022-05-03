@@ -13,7 +13,7 @@ class Player(ABC):
     def make_guess(
         self,
         board_length: int,
-        colors: list[str],
+        colors: 'list[str]',
         scsa_name: str,
         last_response: tuple([int, int, int]),
     ) -> str:
@@ -40,15 +40,15 @@ class Endgame(Player):
     def __init__(self):
         """Constructor for Own Player"""
 
-        self.player_name ="Own"
+        self.player_name ="EndGame"
 
         self.rule_out_dict = []      # knowledge dictionary.
         self.last_guess = None
         self.queue = []
         self.one_char = 0            # to keep track of which character we deal with now.
-        self.gauntlet = []
-        self.try_mode = False
-        self.search_mode = False
+        self.gauntlet = []           # holds our knowledge about the correct code
+        self.try_mode = False        # mode in which we find the right colors
+        self.search_mode = False     # mode in which we find the right place for a correct color
         self.num_of_gems = 0         # number of correct colors with a correct place we discover so far.
         self.cur_char = '#'          # current character we deal with in try and search mode.
 
@@ -76,11 +76,11 @@ class Endgame(Player):
             if guess[i] in self.rule_out_dict[i]:
                 return True
         return False
- 
+
     def make_guess(
         self,
         board_length: int,
-        colors: list[str],
+        colors: 'list[str]',
         scsa_name: str,
         last_response: tuple([int, int, int]),
     ) -> str:
