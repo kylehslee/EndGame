@@ -10,6 +10,10 @@ from Endgame_B2 import *
 from Endgame_d3 import *
 import timeit
 
+## TEST
+from Endgame_beta import *
+## END
+
 start = timeit.default_timer()
 
 parser = argparse.ArgumentParser(description="Play a game of Mastermind.")
@@ -23,7 +27,7 @@ parser.add_argument(
     nargs="?",
     type=str,
     required=True,
-    choices=["RandomFolks", "Boring", "Baseline1", "Baseline2", "Endgame"],
+    choices=["RandomFolks", "Boring", "Baseline1", "Baseline2", "Endgame", "Beta"],
 )
 
 parser.add_argument(
@@ -56,7 +60,9 @@ def str_to_player(player_name: str) -> Player:
     elif player_name == "Baseline2":
         player = Baseline2()
     elif player_name == "Endgame":
-        player = Endgame()        
+        player = Endgame()     
+    elif player_name == "Beta":
+        player = Endgame_Beta()   
     else:
         raise ValueError("Unrecognized Player.")
     return player

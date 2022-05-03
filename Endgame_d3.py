@@ -76,7 +76,7 @@ class Endgame(Player):
             if guess[i] in self.rule_out_dict[i]:
                 return True
         return False
-    
+ 
     def make_guess(
         self,
         board_length: int,
@@ -84,6 +84,7 @@ class Endgame(Player):
         scsa_name: str,
         last_response: tuple([int, int, int]),
     ) -> str:
+
         try:
             # First guess
             if last_response[2] == 0:             
@@ -96,7 +97,7 @@ class Endgame(Player):
                 self.last_guess = guess
                 return guess
 
-            # From second guess.
+            # From the second guess to the last guess
             else:
                 # In try mode, try with all the same letters except for indexes at which we have knowledge.
                 # For example, start with 'AAAA' and if there is a 'A' in the answer, then switch to 
@@ -134,7 +135,8 @@ class Endgame(Player):
                         next_set = [self.cur_char] * (last_response[0] + last_response[1] - self.num_of_gems) \
                         + [chr(65 + (self.one_char % len(colors)))] * (board_length - (last_response[0] + last_response[1]))
 
-                        next_set = set(itertools.permutations(next_set)) # ONLY OPEN-SOURCE LIBRARY
+                        # next_set = set(itertools.permutations(next_set)) # Standard permutations
+                        next_set = list(unique_permutations(next_set))   # Endgame permutations
 
                         for i in next_set:
                             tmp = list(i)
@@ -198,3 +200,26 @@ class Endgame(Player):
             self.search_mode = False
             self.last_guess = guess       
             return guess
+
+class unique_peg:
+    def __init__(self, value, occurrences):
+        self.value = value
+        self.occurrences = occurrences
+
+def unique_permutations(pegs):
+    eset = set(pegs)
+    unique_list = [unique_peg(i,pegs.count(i)) for i in eset]
+    l = len(pegs)
+    return unique_permutations_recursive_helper(unique_list, [0] * l, l - 1)
+
+def unique_permutations_recursive_helper(unique_list, result, idx):
+    if idx < 0:
+        yield tuple(result)
+    else:
+        for i in unique_list:
+            if i.occurrences > 0:
+                result[idx]=i.value
+                i.occurrences-=1
+                for g in  unique_permutations_recursive_helper(unique_list,result,idx-1):
+                    yield g
+                i.occurrences+=1
