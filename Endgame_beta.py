@@ -61,7 +61,7 @@ class Endgame_Beta(Player):
         self.gauntlet_indexes = set()
         self.first_guess_after_try_mode = True
         self.indexes = []
-        self.found_half = False
+        self.board_length = 0
 
     # Reinitialize member variables
     def initialize(self, pegs):
@@ -87,7 +87,8 @@ class Endgame_Beta(Player):
         self.gauntlet_indexes = set()
         self.first_guess_after_try_mode = True
         self.indexes = []
-        self.found_half = False
+        self.board_length = pegs
+
 
         for i in range(pegs): # Initialize rule_out_dict array with empty sets.
             self.rule_out_dict.append(set()) 
@@ -107,6 +108,11 @@ class Endgame_Beta(Player):
         lst = list(s)
         lst[i], lst[j] = lst[j], lst[i]
         return ''.join(lst)
+
+    def swap_tuple(self, tu):
+        list_x = list(tu)
+        list_x[0], list_x[1] = list_x[1], list_x[0]
+        return tuple(list_x)
     
     def clone(self, li):
         li_copy = li[:]
@@ -119,6 +125,8 @@ class Endgame_Beta(Player):
         scsa_name: str,
         last_response: tuple([int, int, int]),
     ) -> str:
+
+        # print(last_response, " ,Last_guess: ", self.last_guess, " , Last_BEST_res: ", self.best_last_response, " , gauntlet: ", self.gauntlet, " , threshold: ", self.threshold, " , last_swapped_idx: ", self.last_swapped_indexes, ", num_gems: ", self.num_of_gems)
         if last_response[2] == 0:             
             self.initialize(board_length)
             guess = 'A' * board_length
@@ -163,7 +171,7 @@ class Endgame_Beta(Player):
 
             # In the search mode, it tries to find the answer by random shuffling or swapping colors
             elif self.search_mode: 
-
+                
                 # If the first element of last response is less than or equal to num_of_gems,
                 # it means that the last guess it tried was meaningless, so update the knowledge base.
                 if last_response[0] <= self.num_of_gems:    
@@ -175,9 +183,8 @@ class Endgame_Beta(Player):
                 # once it finds more correct colors with a correct place than the predefined
                 # threshold. The threshold was set in self.initialize(). It's about half of
                 # the number of pegs.
-                if not self.find_place_bit and last_response[0] >= self.threshold:
+                if not self.find_place_bit and last_response[0] == self.threshold:
                     self.find_place_bit = True
-                    self.found_half = True
                     self.best_last_response = last_response
                     self.current_best = self.last_guess
                 
@@ -206,6 +213,7 @@ class Endgame_Beta(Player):
                     # Once it finds threshold amount of correct colors with a correct place,
                     # update the threshold by incrementing by 2.
                     if self.threshold <= self.num_of_gems:
+                        self.visited.clear()
                         self.find_place_bit = False
                         self.threshold += 2
                         if self.threshold > board_length:
@@ -223,7 +231,8 @@ class Endgame_Beta(Player):
                 tmp.insert(idx, self.gauntlet[idx])
         next_guess = ''.join(map(str, tmp))
 
-        while next_guess in self.visited or self.rule_out(next_guess):
+        cnt = 0
+        while next_guess in self.visited:
             self.visited.add(next_guess)
             tmp = self.clone(self.cache)
             random.shuffle(tmp)
@@ -231,31 +240,49 @@ class Endgame_Beta(Player):
                 if not self.gauntlet[idx] == '#':
                     tmp.insert(idx, self.gauntlet[idx])
             next_guess = ''.join(map(str, tmp))
+            cnt += 1
+            if cnt == 1000:
+                break
 
         self.visited.add(next_guess)
         self.last_guess = next_guess
         return next_guess
 
     def get_next_guess_by_swap(self):
-        swapped_indexes = tuple(random.sample(self.indexes, 2))
-        while swapped_indexes[0] in self.gauntlet_indexes or\
-                swapped_indexes[1] in self.gauntlet_indexes:
-            swapped_indexes = tuple(random.sample(self.indexes, 2))
-                
-        self.last_swapped_indexes = swapped_indexes
 
-        cpy = self.swap(self.current_best, swapped_indexes[0], swapped_indexes[1])
-        self.visited.add(cpy)
-        self.last_guess = cpy
-        return cpy    
+        cnt = 0
+        limit = (self.board_length - self.num_of_gems) * (self.board_length - self.num_of_gems - 1) - 1
+
+        swapped_indexes = tuple(random.sample(self.indexes, 2))
+        while swapped_indexes[0] in self.gauntlet_indexes or \
+              swapped_indexes[1] in self.gauntlet_indexes or \
+              swapped_indexes in self.find_place_random_indexes_history:
+            swapped_indexes = tuple(random.sample(self.indexes, 2))
+            cnt += 1
+
+            if cnt == limit:
+                self.find_place_bit = False
+                return self.get_next_guess_by_shuffle()
+
+
+        self.last_swapped_indexes = swapped_indexes
+        self.find_place_random_indexes_history.add(swapped_indexes)
+        self.find_place_random_indexes_history.add(self.swap_tuple(swapped_indexes))
+
+        next_guess = self.swap(self.current_best, swapped_indexes[0], swapped_indexes[1])
+        self.visited.add(next_guess)
+        self.last_guess = next_guess
+        return next_guess    
 
     def get_next_guess(self):
-        if self.found_half:
+        if self.find_place_bit:
             return self.get_next_guess_by_swap() 
         else:
             return self.get_next_guess_by_shuffle()
     
     def update_gauntlet_and_cache(self):
+        self.find_place_random_indexes_history.clear()
+        
         self.gauntlet[self.last_swapped_indexes[0]] = self.current_best[self.last_swapped_indexes[0]]
         self.gauntlet[self.last_swapped_indexes[1]] = self.current_best[self.last_swapped_indexes[1]]
         self.num_of_gems += 2
@@ -263,10 +290,11 @@ class Endgame_Beta(Player):
         tmp_cache = self.clone(self.cache)
         tmp_cache.remove(self.current_best[self.last_swapped_indexes[0]])
         tmp_cache.remove(self.current_best[self.last_swapped_indexes[1]])
-        self.indexes.remove(self.last_swapped_indexes[0])
-        self.indexes.remove(self.last_swapped_indexes[1])
         self.cache = tmp_cache
 
+        self.indexes.remove(self.last_swapped_indexes[0])
+        self.indexes.remove(self.last_swapped_indexes[1])
+        
         self.gauntlet_indexes.add(self.last_swapped_indexes[0])
         self.gauntlet_indexes.add(self.last_swapped_indexes[1])            
 
