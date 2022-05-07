@@ -49,8 +49,12 @@ class Endgame(Player):
         self.gauntlet = []           # holds our knowledge about the correct code
         self.try_mode = False        # mode in which we find the right colors
         self.search_mode = False     # mode in which we find the right place for a correct color
+        self.color_first_mode = False# mode in which we populate a color map with the correct colors and how many of each
         self.num_of_gems = 0         # number of correct colors with a correct place we discover so far.
         self.cur_char = '#'          # current character we deal with in try and search mode.
+        self.correct_colors = 0      # number of correct colors 
+        self.color_map = []          #generated in color first mode, holds correct colos and how many of each
+
 
     # Reinitialize member variables
     def late_constructor(self, pegs):
@@ -59,9 +63,10 @@ class Endgame(Player):
         self.queue = []
         self.one_char = 0
         self.gauntlet = []                                  
-        self.try_mode = False
+        self.try_mode = True
         self.search_mode = False
-        self.num_of_gems = 0    
+        self.num_of_gems = 0   
+        self.correct_colors = 0 
         self.cur_char = '#'  
 
         for i in range(pegs): # Initialize rule_out_dict array with empty sets.
@@ -84,10 +89,8 @@ class Endgame(Player):
         scsa_name: str,
         last_response: tuple([int, int, int]),
     ) -> str:
-        print("Last_Guess:", self.last_guess, "  ,Last_response:", last_response)
-        print(self.rule_out_dict)
+
         try:
-            print(last_response)
             # First guess
             if last_response[2] == 0:             
                 self.late_constructor(board_length)
@@ -95,20 +98,48 @@ class Endgame(Player):
                 self.cur_char = 'A' 
                 self.one_char += 1  
                 self.try_mode = True 
+                self.color_first_mode = False
                 self.search_mode = False
                 self.last_guess = guess
+                self.color_map = []
                 return guess
 
             # From the second guess to the last guess
             else:
+                if self.color_first_mode == True:
+                        if last_response[0] > 0:
+                            self.correct_colors += last_response[0]
+                            self.color_map.append((self.last_guess[0],last_response[0]))
+                            self.cur_char = chr(65 + (self.one_char % len(colors)))
+                            self.one_char += 1
+                            #check if we found all colors after update
+                            #if so get ready for next phase
+                            if self.correct_colors == board_length:
+                                #reset current char and guess to AAAA, for compatibility with other modes after obtaining color map
+                                self.late_constructor(board_length)
+                                guess = 'A' * board_length
+                                self.cur_char = 'A'
+                                self.one_char = 1
+                                self.color_first_mode = False #update mode to exit
+                                self.try_mode = True #move to next mode-can change for scsa specific code
+                                self.search_mode = False
+                                self.last_guess = guess       
+                                #print(self.color_map)
+                                return guess
+                        else: #color not in code, just go next
+                            self.cur_char = chr(65 + (self.one_char % len(colors)))
+                            self.one_char += 1
+                        #update and submit guess
+                        guess = self.cur_char * board_length 
+                        self.last_guess = guess   
+                        return guess
                 # In try mode, try with all the same letters except for indexes at which we have knowledge.
                 # For example, start with 'AAAA' and if there is a 'A' in the answer, then switch to 
                 # search mode and find which index the 'A' is positioned at.
                 # Once we get the index of 'A', let's say 'A' is at the first index( 0-indexed ),
                 # then we will try to guess with all B's except the first index. 
                 # Our next try guess would look like 'BABB'
-                if self.try_mode:   
-                    
+                elif self.try_mode:   
                     # if the sum of correct colors with a correct place and correct colors with a wrong place is
                     # less than or equal to the number of correct colors with a correct place we discover so far,
                     # then it means the color we try right now is not in the answer, so try with the next 
@@ -203,6 +234,8 @@ class Endgame(Player):
             self.last_guess = guess       
             return guess
 
+#Code to obtain unique multiset permutations. standard version includes duplicate permutaions, 
+# this specifies the occurances of each value and returns the unique permutaions via recrusion
 class unique_peg:
     def __init__(self, value, occurrences):
         self.value = value
