@@ -50,6 +50,7 @@ class Endgame(Player):
         self.try_mode = False        # mode in which we find the right colors
         self.search_mode = False     # mode in which we find the right place for a correct color
         self.color_first_mode = False# mode in which we populate a color map with the correct colors and how many of each
+        self.test_color_by_peg_mode = False #
         self.num_of_gems = 0         # number of correct colors with a correct place we discover so far.
         self.cur_char = '#'          # current character we deal with in try and search mode.
         self.correct_colors = 0      # number of correct colors 
@@ -96,10 +97,15 @@ class Endgame(Player):
                 self.late_constructor(board_length)
                 guess = 'A' * board_length
                 self.cur_char = 'A' 
-                self.one_char += 1  
-                self.try_mode = True 
-                self.color_first_mode = False
-                self.search_mode = False
+                self.one_char += 1
+                if scsa_name == "ABColor" or scsa_name == "TwoColor":
+                    self.try_mode = False 
+                    self.color_first_mode = True
+                    self.search_mode = False
+                else:
+                    self.try_mode = True 
+                    self.color_first_mode = False
+                    self.search_mode = False
                 self.last_guess = guess
                 self.color_map = []
                 return guess
@@ -120,6 +126,15 @@ class Endgame(Player):
                                 guess = 'A' * board_length
                                 self.cur_char = 'A'
                                 self.one_char = 1
+                                if scsa_name == "ABColor" or scsa_name == "TwoColor":
+                                    self.try_mode = False 
+                                    self.color_first_mode = False
+                                    self.test_color_by_peg_mode = True
+                                    #guess should be homogenous of first color in color map
+                                    guess = self.color_map[0][0]* board_length
+                                else:
+                                    self.try_mode = True 
+                                    self.color_first_mode = False
                                 self.color_first_mode = False #update mode to exit
                                 self.try_mode = True #move to next mode-can change for scsa specific code
                                 self.search_mode = False
@@ -133,6 +148,42 @@ class Endgame(Player):
                         guess = self.cur_char * board_length 
                         self.last_guess = guess   
                         return guess
+
+                elif self.test_color_by_peg_mode:
+                    #print(self.color_map)
+                    if scsa_name == "ABColor" or scsa_name == "TwoColor":
+                        guess = list(self.last_guess) #change guess into list so we can change elements
+                        if self.last_guess == self.color_map[0][0] * board_length: #this is our first guess in test_color_by_peg_mode
+                            #print(guess)
+                            guess[0] = self.color_map[1][0]
+                            guess = "".join(guess)
+                            #print(guess)
+                            self.one_char = 0 #index of checking 
+                            self.num_of_gems = last_response[0]
+                            self.last_guess = guess
+                            #print(guess)
+                            self.last_guess = guess
+                            return guess
+                        else:
+                            if self.num_of_gems < last_response[0]: #change to B was good
+                                self.num_of_gems += 1 #increment our correct pegs
+                                #self.gauntlet[self.one_char] = self.last_guess[self.one_char]
+                                self.one_char += 1
+                                guess[self.one_char] = self.color_map[1][0]
+                                guess = "".join(guess)
+                                #print(guess)
+                            elif self.num_of_gems > last_response[0]:#change was bad
+                                guess[self.one_char] = self.color_map[0][0] #change it back
+                                self.one_char += 1
+                                guess[self.one_char] = self.color_map[1][0]
+                                guess = "".join(guess)
+                                #print(guess)
+                            else: #no change in gems
+                                print("oh no")
+                    #print(guess)
+                    self.last_guess = guess
+                    return guess      
+
                 # In try mode, try with all the same letters except for indexes at which we have knowledge.
                 # For example, start with 'AAAA' and if there is a 'A' in the answer, then switch to 
                 # search mode and find which index the 'A' is positioned at.
