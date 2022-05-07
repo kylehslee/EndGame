@@ -84,7 +84,8 @@ class Endgame(Player):
         scsa_name: str,
         last_response: tuple([int, int, int]),
     ) -> str:
-
+        print("Last_Guess:", self.last_guess, "  ,Last_response:", last_response)
+        print(self.rule_out_dict)
         try:
             # First guess
             if last_response[2] == 0:             
