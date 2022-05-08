@@ -118,7 +118,7 @@ class Endgame(Player):
                 if self.scsa_color_first_mode == True:
                         if last_response[0] > 0:
                             self.scsa_correct_colors += last_response[0]
-                            self.color_map.append((self.last_guess[0],last_response[0]))
+                            self.scsa_color_map.append((self.last_guess[0],last_response[0]))
                             self.cur_char = chr(65 + (self.one_char % len(colors)))
                             self.one_char += 1
                             #check if we found all colors after update
@@ -131,18 +131,18 @@ class Endgame(Player):
                                 self.one_char = 1
                                 if scsa_name == "ABColor" or scsa_name == "TwoColor" or scsa_name == "mystery2":
                                     self.try_mode = False 
-                                    #self.scsa_color_first_mode = False
+                                    self.scsa_color_first_mode = False
                                     self.scsa_test_color_by_peg_mode = True
                                     #guess should be homogenous of first color in color map
-                                    guess = self.color_map[0][0]* board_length
+                                    guess = self.scsa_color_map[0][0]* board_length
                                 else:
                                     self.try_mode = True 
-                                    #self.scsa_color_first_mode = False
+                                    self.scsa_color_first_mode = False
                                 self.scsa_color_first_mode = False #update mode to exit
                                 self.try_mode = True #move to next mode-can change for scsa specific code
                                 self.search_mode = False
                                 self.last_guess = guess       
-                                #print(self.color_map)
+                                #print(self.scsa_color_map)
                                 return guess
                         else: #color not in code, just go next
                             self.cur_char = chr(65 + (self.one_char % len(colors)))
@@ -153,13 +153,13 @@ class Endgame(Player):
                         return guess
 
                 elif self.scsa_test_color_by_peg_mode:
-                    #print(self.color_map)
+                    #print(self.scsa_color_map)
                     if scsa_name == "ABColor" or scsa_name == "TwoColor" or (scsa_name == "mystery2" and self.one_char < 3): 
                         #print("yo 1")
                         guess = list(self.last_guess) #change guess into list so we can change elements
-                        if self.last_guess == self.color_map[0][0] * board_length: #this is our first guess in test_color_by_peg_mode
+                        if self.last_guess == self.scsa_color_map[0][0] * board_length: #this is our first guess in test_color_by_peg_mode
                             #print(guess)
-                            guess[0] = self.color_map[1][0]
+                            guess[0] = self.scsa_color_map[1][0]
                             guess = "".join(guess)
                             #print(guess)
                             self.one_char = 0 #index of checking 
@@ -171,19 +171,19 @@ class Endgame(Player):
                                 self.num_of_gems += 1 #increment our correct pegs
                                 self.one_char += 1 #go to next peg
                                 self.scsa_color_map_index= 1 #reset colormap index for next peg
-                                guess[self.one_char] = self.color_map[self.color_map_index][0]
+                                guess[self.one_char] = self.scsa_color_map[self.scsa_color_map_index][0]
                                 guess = "".join(guess)
                                 #print(guess)
                             elif self.num_of_gems > last_response[0]:#change was bad, previous was correct
-                                guess[self.one_char] = self.color_map[self.color_map_index-1][0] #change it back
+                                guess[self.one_char] = self.scsa_color_map[self.scsa_color_map_index-1][0] #change it back
                                 self.one_char += 1 #next peg
                                 self.scsa_color_map_index= 1
-                                guess[self.one_char] = self.color_map[self.color_map_index][0]
+                                guess[self.one_char] = self.scsa_color_map[self.scsa_color_map_index][0]
                                 guess = "".join(guess)
                                 #print(guess)
                             else: #no change in gems, neither previous nor change were right
                                 self.scsa_color_map_index+= 1
-                                guess[self.one_char] = self.color_map[self.color_map_index][0] #try next color in colormap at this peg
+                                guess[self.one_char] = self.scsa_color_map[self.scsa_color_map_index][0] #try next color in colormap at this peg
                                 guess = "".join(guess)
                     elif scsa_name == "mystery2": #we are on 3rd or greater index of code, for this one it repeats pattern
                             #print("yo")
