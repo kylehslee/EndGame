@@ -7,7 +7,7 @@ from player import *
 from mastermind import *
 from Endgame_B1 import *
 from Endgame_B2 import *
-from Endgame_d3 import *
+from Endgame_d3_2 import *
 import timeit
 
 ## TEST
