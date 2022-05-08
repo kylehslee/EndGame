@@ -66,6 +66,8 @@ class Endgame(Player):
         self.gauntlet = []                                  
         self.try_mode = True
         self.search_mode = False
+        self.color_first_mode = False
+        self.test_color_by_peg_mode = False
         self.num_of_gems = 0   
         self.correct_colors = 0 
         self.cur_char = '#'  
@@ -151,7 +153,7 @@ class Endgame(Player):
 
                 elif self.test_color_by_peg_mode:
                     #print(self.color_map)
-                    if scsa_name == "ABColor" or scsa_name == "TwoColor":
+                    if scsa_name == "ABColor" or scsa_name == "TwoColor": 
                         guess = list(self.last_guess) #change guess into list so we can change elements
                         if self.last_guess == self.color_map[0][0] * board_length: #this is our first guess in test_color_by_peg_mode
                             #print(guess)
