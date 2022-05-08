@@ -7,7 +7,9 @@ from player import *
 from mastermind import *
 from Endgame_B1 import *
 from Endgame_B2 import *
-from Endgame_d3_2 import *
+#from Endgame_d3_2 import *
+#from Endgame_d3 import *
+from Endgame_d3_all_combined import *
 import timeit
 
 ## TEST
@@ -96,7 +98,7 @@ mastermind = Mastermind(args.board_length, colors)
 
 mastermind.play_tournament(player, scsa, args.num_rounds) # for regular scsas
 
-# mastermind.practice_tournament(player, scsa, "mystery5_7_5.txt") # for 
+#mastermind.practice_tournament(player, scsa, "mystery5_7_5.txt") # for 
 
 stop = timeit.default_timer()
 execution_time = stop - start
